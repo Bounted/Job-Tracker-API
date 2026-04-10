@@ -18,6 +18,16 @@ class TaskCreate(BaseModel):
     status: bool = Field(default=False, description="Статус задачи.")
 
 
-class TaskRead(TaskCreate):
+class TaskRead(BaseModel):
     id: int
+    name: str
+    content: str
+    status: bool = Field(default=False, description="Статус задачи.")
+    model_config = ConfigDict(from_attributes=True)
+
+class TaskUpdate(BaseModel):
+    id: int
+    name: str
+    content: str
+    status: bool = Field(default=False, description="Статус задачи.")
     model_config = ConfigDict(from_attributes=True)

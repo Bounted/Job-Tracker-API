@@ -4,20 +4,22 @@ from typing import Annotated
 from core.exceptions import credentials_exception, NotFoundError
 from services.user_service import ensure_user_exists
 from db.session import get_db
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from core.config import settings
 from fastapi.security import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
-def get_current_user(
+async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
 
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         username = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -25,6 +27,6 @@ def get_current_user(
     except JWTError:
         raise credentials_exception
     try:
-        return ensure_user_exists(db, username)
+        return await ensure_user_exists(db, username)
     except NotFoundError:
         raise credentials_exception

@@ -12,13 +12,15 @@ API для управления задачами. Можно:
 
 - Python 3.13
 - FastAPI
-- SQLAlchemy + PostgreSQL
+- SQLAlchemy + PostgreSQL (async)
 - Alembic (миграции)
 - Docker + Docker Compose
-- Pytest
+- Pytest + pytest-asyncio + httpx
 - Poetry
 
 ## Тесты
+
+Все тесты асинхронные. Запуск:
 
 docker compose exec web poetry run pytest --cov
 
@@ -42,12 +44,12 @@ docker compose exec web poetry run pytest --cov
 ## Запуск
 
 1. Клонировать репозиторий
-2. Скопировать .env.example в .env и указать свои значения:
+2. Скопировать в .env и указать свои значения:
 
 SECRET_KEY=любой_секретный_ключ
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
-DATABASE_URL=postgresql://postgres:пароль@db:5432/todo_app
+DATABASE_URL=postgresql+asyncpg://postgres:пароль@db:5432/todo_app
 
 3. docker compose up -d --build
 4. docker compose exec web poetry run alembic upgrade head

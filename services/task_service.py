@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from repositories.task_repo import (
     get_tasks_user,
     get_by_id_and_user,
@@ -13,28 +13,28 @@ from models.task import TaskStatus
 from sqlalchemy.exc import IntegrityError
 
 
-def get_tasks_by_user(db: Session, user_id: int, offset: int = 0, limit: int = 10):
-    get_user_by_id(db, user_id)
-    return get_tasks_user(db, user_id, offset, limit)
+async def get_tasks_by_user(db: AsyncSession, user_id: int, offset: int = 0, limit: int = 10):
+    await get_user_by_id(db, user_id)
+    return await get_tasks_user(db, user_id, offset, limit)
 
 
-def create_task(db: Session, task: TaskCreate, user_id: int):
+async def create_task(db: AsyncSession, task: TaskCreate, user_id: int):
     try:
-        return create(db, task.name, task.content or "", task.state, user_id)
+        return await create(db, task.name, task.content or "", task.state, user_id)
     except IntegrityError:
         raise AlreadyExistsError("A task with this name already exists.")
 
 
-def update_task_status(db: Session, task_id: int, state: TaskStatus, user_id: int):
-    task = get_by_id_and_user(db, task_id, user_id)
+async def update_task_status(db: AsyncSession, task_id: int, state: TaskStatus, user_id: int):
+    task = await get_by_id_and_user(db, task_id, user_id)
     if task is None:
         raise NotFoundError("A task with this ID does not exist.")
     task.state = state  # type: ignore
-    return update(db, task)
+    return await update(db, task)
 
 
-def delete_task(db: Session, task_id: int, user_id: int) -> None:
-    task = get_by_id_and_user(db, task_id, user_id)
+async def delete_task(db: AsyncSession, task_id: int, user_id: int) -> None:
+    task = await get_by_id_and_user(db, task_id, user_id)
     if task is None:
         raise NotFoundError("A task with this ID does not exist.")
-    delete(db, task_id, user_id)
+    await delete(db, task_id, user_id)

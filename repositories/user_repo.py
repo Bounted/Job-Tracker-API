@@ -1,22 +1,25 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from models.user import User
+import sqlalchemy
 
 
-def get_by_id(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+async def get_by_id(db: AsyncSession, user_id: int):
+    result = await db.execute(sqlalchemy.select(User).where(User.id == user_id))
+    return result.scalar_one_or_none()
 
 
-def get_by_name(db: Session, name: str):
-    return db.query(User).filter(User.name == name).first()
+async def get_by_name(db: AsyncSession, name: str):
+    result = await db.execute(sqlalchemy.select(User).where(User.name == name))
+    return result.scalar_one_or_none()
 
 
-def create(db: Session, name: str, hashed_password: str):
+async def create(db: AsyncSession, name: str, hashed_password: str):
     user = User(name=name, hashed_password=hashed_password)
     db.add(user)
-    db.flush()
+    await db.flush()
     return user
- 
 
-def delete(db: Session, user_id: int):
-    db.query(User).filter(User.id == user_id).delete()
-    db.flush()
+
+async def delete(db: AsyncSession, user_id: int):
+    await db.execute(sqlalchemy.delete(User).where(User.id == user_id))
+    await db.flush()

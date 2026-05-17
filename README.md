@@ -21,8 +21,11 @@ API для управления задачами. Можно:
 ## Тесты
 
 Все тесты асинхронные. Запуск:
-
 docker compose exec web poetry run pytest --cov
+
+## CI/CD
+
+При каждом пуше GitHub Actions автоматически запускает тесты.
 
 ## Структура проекта
 
@@ -40,6 +43,7 @@ docker compose exec web poetry run pytest --cov
 ├── api/             # роутеры и зависимости
 ├── tests/           # тесты
 ├── alembic/         # миграции
+├── .github/workflows/
 
 ## Запуск
 

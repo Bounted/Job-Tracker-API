@@ -1,7 +1,7 @@
 from fastapi import Depends
 from jose import jwt, JWTError
 from typing import Annotated
-from core.exceptions import credentials_exception, NotFoundError
+from core.exceptions import CredentialsError, NotFoundError
 from services.user_service import ensure_user_exists
 from db.session import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,11 +22,13 @@ async def get_current_user(
         )
         username = payload.get("sub")
         if username is None:
-            raise credentials_exception
+            raise CredentialsError("Не удалось проверить учетные данные.")
 
     except JWTError:
-        raise credentials_exception
+        raise CredentialsError("Не удалось проверить учетные данные.")
     try:
         return await ensure_user_exists(db, username)
     except NotFoundError:
-        raise credentials_exception
+        # Все ошибки аутентификации возвращаем как 401.
+        # чтобы не раскрывать факт существования пользователя.
+        raise CredentialsError("Не удалось проверить учетные данные.")

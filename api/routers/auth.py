@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.session import get_db
 from schemas.auth import Token
-from core.exceptions import authentication_exception
+from core.exceptions import AuthenticationError
 from services.auth_service import login
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -17,5 +17,5 @@ async def login_for_access_token(
 ) -> Token:
     access_token = await login(db, form_data.username, form_data.password)
     if not access_token:
-        raise authentication_exception
+        raise AuthenticationError("Неверное имя пользователя или пароль.")
     return Token(access_token=access_token, token_type="bearer")

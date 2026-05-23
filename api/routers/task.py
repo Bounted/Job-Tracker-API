@@ -1,18 +1,19 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.task import TaskCreate, TaskRead
+from schemas.task import TaskCreate, TaskRead, TaskPut
 from services.task_service import (
     create_task,
     get_tasks_by_user,
     update_task_status,
     delete_task,
+    get_task_by_id,
+    update_task,
 )
 from db.session import get_db
 from typing import List
 from api.deps import get_current_user
 from models.user import User
 from models.task import TaskStatus
-from core.exceptions import AlreadyExistsError, NotFoundError
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
@@ -23,10 +24,7 @@ async def create_task_route(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    try:
-        return await create_task(db, task, current_user.id)
-    except AlreadyExistsError as a:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(a))
+    return await create_task(db, task, current_user.id)
 
 
 @router.get("/me", response_model=List[TaskRead])
@@ -39,6 +37,25 @@ async def get_task_route(
     return await get_tasks_by_user(db, current_user.id, offset, limit)
 
 
+@router.get("/{task_id}", response_model=TaskRead)
+async def get_task_by_id_route(
+    task_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return await get_task_by_id(db, task_id, current_user.id)
+
+
+@router.put("/{task_id}", response_model=TaskRead)
+async def put_task_route(
+    task_id: int,
+    task: TaskPut,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return await update_task(db, task_id, task, current_user.id)
+
+
 @router.patch("/{task_id}/{state}", response_model=TaskRead)
 async def patch_status_task_route(
     task_id: int,
@@ -46,10 +63,7 @@ async def patch_status_task_route(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    try:
-        return await update_task_status(db, task_id, state, current_user.id)
-    except NotFoundError as n:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(n))
+    return await update_task_status(db, task_id, state, current_user.id)
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -58,7 +72,4 @@ async def delete_task_router(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    try:
-        await delete_task(db, task_id, current_user.id)
-    except NotFoundError as n:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(n))
+    await delete_task(db, task_id, current_user.id)

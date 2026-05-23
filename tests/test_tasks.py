@@ -1,7 +1,12 @@
-from schemas.task import TaskCreate
+from schemas.task import TaskCreate, TaskPut
 from pydantic import ValidationError
 import pytest
-from services.task_service import create_task, update_task_status, delete_task
+from services.task_service import (
+    create_task,
+    update_task_status,
+    delete_task,
+    update_task,
+)
 from core.exceptions import NotFoundError, AlreadyExistsError
 from models.task import TaskStatus
 from repositories.task_repo import get_by_id_and_user
@@ -28,6 +33,30 @@ async def test_create_task_duplicate(
 ):
     with pytest.raises(AlreadyExistsError):
         await create_task(test_db, test_schemas_create_task, test_create_user.id)
+
+
+async def test_put_task_valid(test_db, test_create_task, test_create_user):
+    task = await update_task(
+        test_db,
+        test_create_task.id,
+        TaskPut(
+            name="TestTaskName", content="testcontent", state=TaskStatus("at_work")
+        ),
+        test_create_user.id,
+    )
+    assert task.content == "testcontent"
+
+
+async def test_put_task_invalid(test_db, test_create_task):
+    with pytest.raises(NotFoundError):
+        await update_task(
+            test_db,
+            test_create_task.id,
+            TaskPut(
+                name="TestTaskName", content="testcontent", state=TaskStatus("at_work")
+            ),
+            999,
+        )
 
 
 async def test_update_task_status_valid(test_db, test_create_task, test_create_user):
@@ -113,3 +142,21 @@ async def test_delete_task_valid(test_client, test_access_token):
     assert response.status_code == 204
 
 
+async def test_put_task_valid(test_client, test_access_token, test_create_task):
+    response = await test_client.put(
+        f"/tasks/{test_create_task.id}",
+        headers={"Authorization": f"Bearer {test_access_token}"},
+        json={"name": "TestTaskName", "content": "string", "state": "ready"},
+    )
+
+    assert response.status_code == 200
+
+
+async def test_put_task_not_found(test_client, test_access_token):
+    response = await test_client.put(
+        f"/tasks/{999}",
+        headers={"Authorization": f"Bearer {test_access_token}"},
+        json={"name": "TestTaskName", "content": "string", "state": "ready"},
+    )
+
+    assert response.status_code == 404

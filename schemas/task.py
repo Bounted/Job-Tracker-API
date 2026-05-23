@@ -22,3 +22,9 @@ class TaskUpdate(BaseModel):
     name: str | None = Field(None, min_length=2, max_length=100)
     content: str | None = None
     state: TaskStatus | None = None
+
+
+class TaskPut(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    content: str
+    state: TaskStatus

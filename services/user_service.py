@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 async def ensure_user_exists(db: AsyncSession, name: str):
     user = await get_by_name(db, name)
     if user is None:
-        raise NotFoundError("A user with this name does not exist.")
+        raise NotFoundError("Пользователя с таким именем не существует.")
     return user
 
 
@@ -21,7 +21,7 @@ async def get_user_by_name_or_none(db: AsyncSession, name: str):
 async def get_user_by_id(db: AsyncSession, user_id: int):
     user = await get_by_id(db, user_id)
     if user is None:
-        raise NotFoundError("A user with this ID does not exist.")
+        raise NotFoundError("Пользователя с таким ID не существует.")
     return user
 
 
@@ -36,4 +36,4 @@ async def create_user(db: AsyncSession, user: UserCreate):
         user = await create(db, user.name, hashed)
         return user
     except IntegrityError:
-        raise AlreadyExistsError("A user with this name already exists.")
+        raise AlreadyExistsError("Пользователь с таким именем уже существует.")

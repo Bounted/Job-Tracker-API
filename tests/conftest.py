@@ -25,7 +25,7 @@ async def test_table():
             db, UserCreate(name="TestUserName", password="TestHashPassword")
         )
         test_task = await create_task(
-            db, TaskCreate(name="TestTaskName"), user_id=test_user.id
+            db, TaskCreate(name="TestTaskName"), user_id=test_user.id  # type: ignore
         )
         await db.commit()
     yield test_user, test_task

@@ -24,7 +24,7 @@ async def create_task_route(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    return await create_task(db, task, current_user.id)
+    return await create_task(db, task, current_user.id)  # type: ignore
 
 
 @router.get("/me", response_model=List[TaskRead])
@@ -34,7 +34,7 @@ async def get_task_route(
     offset: int = 0,
     limit: int = 10,
 ):
-    return await get_tasks_by_user(db, current_user.id, offset, limit)
+    return await get_tasks_by_user(db, current_user.id, offset, limit)  # type: ignore
 
 
 @router.get("/{task_id}", response_model=TaskRead)
@@ -43,7 +43,7 @@ async def get_task_by_id_route(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return await get_task_by_id(db, task_id, current_user.id)
+    return await get_task_by_id(db, task_id, current_user.id)  # type: ignore
 
 
 @router.put("/{task_id}", response_model=TaskRead)
@@ -53,7 +53,7 @@ async def put_task_route(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return await update_task(db, task_id, task, current_user.id)
+    return await update_task(db, task_id, task, current_user.id)  # type: ignore
 
 
 @router.patch("/{task_id}/{state}", response_model=TaskRead)
@@ -63,7 +63,7 @@ async def patch_status_task_route(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    return await update_task_status(db, task_id, state, current_user.id)
+    return await update_task_status(db, task_id, state, current_user.id)  # type: ignore
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -72,4 +72,4 @@ async def delete_task_router(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    await delete_task(db, task_id, current_user.id)
+    await delete_task(db, task_id, current_user.id)  # type: ignore

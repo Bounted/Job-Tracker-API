@@ -20,7 +20,7 @@ target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
-    url = settings.DATABASE_URL
+    url = settings.DATABASE_URL.replace("+asyncpg", "")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -33,7 +33,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    connectable = create_engine(settings.DATABASE_URL)
+    connectable = create_engine(settings.DATABASE_URL.replace("+asyncpg", ""))
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)

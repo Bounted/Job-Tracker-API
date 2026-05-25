@@ -19,7 +19,7 @@ async def create_user_route(user: UserCreate, db: AsyncSession = Depends(get_db)
 async def get_user_route(
     current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)
 ):
-    return await get_user_by_id(db, current_user.id)
+    return await get_user_by_id(db, current_user.id)  # type: ignore
 
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
@@ -27,4 +27,4 @@ async def delete_user_route(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    await delete_user(db, current_user.id)
+    await delete_user(db, current_user.id)  # type: ignore

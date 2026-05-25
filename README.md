@@ -3,6 +3,8 @@
 API для управления задачами. Можно:
 - зарегистрироваться
 - авторизоваться (JWT)
+- обновлять токен без повторного входа
+- выходить из системы (logout)
 - создавать задачи
 - менять статус задач
 - удалять задачи
@@ -17,6 +19,10 @@ API для управления задачами. Можно:
 - Docker + Docker Compose
 - Pytest + pytest-asyncio + httpx
 - Poetry
+- Refresh-токены + Logout
+- Health check + Readiness probe
+- Connection pooling
+- Стандартизированные ответы ошибок
 
 ## Тесты
 
@@ -26,6 +32,10 @@ docker compose exec web poetry run pytest --cov
 ## CI/CD
 
 При каждом пуше GitHub Actions автоматически запускает тесты.
+
+## Деплой
+
+Проект развёрнут на Render: https://fastapi-task-api-kzur.onrender.com/docs
 
 ## Структура проекта
 

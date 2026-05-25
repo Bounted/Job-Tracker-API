@@ -22,7 +22,7 @@ async def test_user_create_invalid(name, password):
 
 async def test_ensure_user_exists_valid(test_db, test_create_user):
     user = await ensure_user_exists(test_db, test_create_user.name)
-    assert user.name == "TestUserName"
+    assert user.name == "TestUserName"  # type: ignore
 
 
 async def test_ensure_user_exists_invalid(test_db):
@@ -32,7 +32,7 @@ async def test_ensure_user_exists_invalid(test_db):
 
 async def test_get_user_by_id_valid(test_db, test_create_user):
     user = await get_user_by_id(test_db, test_create_user.id)
-    assert user.name == "TestUserName"
+    assert user.name == "TestUserName"  # type: ignore
 
 
 async def test_get_user_by_id_invalid(test_db):

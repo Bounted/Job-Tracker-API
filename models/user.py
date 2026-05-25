@@ -9,3 +9,7 @@ class User(Base):
     name = Column(String(100), nullable=False, unique=True, index=True)
     hashed_password = Column(String, nullable=False)
     tasks = relationship("Task", back_populates="user", cascade="all, delete")
+    tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete")
+
+
+

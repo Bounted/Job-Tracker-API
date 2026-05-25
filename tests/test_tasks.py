@@ -25,7 +25,7 @@ async def test_task_create_invalid(name):
 
 async def test_create_task_valid(test_db, test_create_user):
     test = await create_task(test_db, TaskCreate(name="Task_name"), test_create_user.id)
-    assert test.name == "Task_name"
+    assert test.name == "Task_name"  # type: ignore
 
 
 async def test_create_task_duplicate(
@@ -35,7 +35,7 @@ async def test_create_task_duplicate(
         await create_task(test_db, test_schemas_create_task, test_create_user.id)
 
 
-async def test_put_task_valid(test_db, test_create_task, test_create_user):
+async def test_put_task_service_valid(test_db, test_create_task, test_create_user):
     task = await update_task(
         test_db,
         test_create_task.id,
@@ -44,7 +44,7 @@ async def test_put_task_valid(test_db, test_create_task, test_create_user):
         ),
         test_create_user.id,
     )
-    assert task.content == "testcontent"
+    assert task.content == "testcontent"  # type: ignore
 
 
 async def test_put_task_invalid(test_db, test_create_task):
@@ -63,7 +63,7 @@ async def test_update_task_status_valid(test_db, test_create_task, test_create_u
     task = await update_task_status(
         test_db, test_create_task.id, TaskStatus("at_work"), test_create_user.id
     )
-    assert task.state == "at_work"
+    assert task.state == "at_work"  # type: ignore
 
 
 async def test_update_task_status_invalid(test_db, test_create_user):
@@ -73,12 +73,12 @@ async def test_update_task_status_invalid(test_db, test_create_user):
         )
 
 
-async def test_delete_task_valid(test_db, test_create_user):
+async def test_delete_task_service_valid(test_db, test_create_user):
     task = await create_task(
         test_db, TaskCreate(name="TestTaskDelete"), test_create_user.id
     )
-    await delete_task(test_db, task.id, test_create_user.id)
-    deleted = await get_by_id_and_user(test_db, task.id, test_create_user.id)
+    await delete_task(test_db, task.id, test_create_user.id)  # type: ignore
+    deleted = await get_by_id_and_user(test_db, task.id, test_create_user.id)  # type: ignore
     assert deleted is None
 
 

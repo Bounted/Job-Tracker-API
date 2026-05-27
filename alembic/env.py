@@ -8,7 +8,8 @@ from sqlalchemy import create_engine
 from alembic import context
 from db.base import Base
 from models.user import User
-from models.task import Task
+from models.application import Application
+from models.refresh_token import RefreshToken
 from core.config import settings
 
 config = context.config

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.routers import task, user, auth, health
+from api.routers import application, user, auth, health
 from api.exceptions import (
     not_found_handler,
     already_exists_handler,
@@ -16,7 +16,7 @@ from core.exceptions import (
 from fastapi.exceptions import RequestValidationError
 
 app = FastAPI()
-app.include_router(task.router)
+app.include_router(application.router)
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(health.router)

@@ -2,11 +2,11 @@ from db.base import Base
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 import pytest
 from services.user_service import create_user
-from services.task_service import create_task
+from services.application_service import create_application
 from schemas.user import UserCreate
-from schemas.task import TaskCreate
+from schemas.application import ApplicationCreate
 from repositories.user_repo import get_by_name
-from repositories.task_repo import get_by_id_and_user
+from repositories.application_repo import get_by_id_and_user
 from main import app
 from db.session import get_db
 from httpx import ASGITransport, AsyncClient
@@ -24,11 +24,11 @@ async def test_table():
         test_user = await create_user(
             db, UserCreate(name="TestUserName", password="TestHashPassword")
         )
-        test_task = await create_task(
-            db, TaskCreate(name="TestTaskName"), user_id=test_user.id  # type: ignore
+        test_application = await create_application(
+            db, ApplicationCreate(name="TestApplicationName"), user_id=test_user.id
         )
         await db.commit()
-    yield test_user, test_task
+    yield test_user, test_application
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
     await engine.dispose()
@@ -73,11 +73,10 @@ async def test_create_user(test_db):
 
 
 @pytest.fixture
-async def test_create_task(test_db, test_table):
+async def test_create_application(test_db, test_table):
     return await get_by_id_and_user(test_db, test_table[1].id, test_table[0].id)
 
 
 @pytest.fixture
-async def test_schemas_create_task():
-    task = TaskCreate(name="TestTaskName")
-    return task
+async def test_schemas_create_application():
+    return ApplicationCreate(name="TestApplicationName")

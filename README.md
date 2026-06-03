@@ -42,21 +42,21 @@ docker compose exec web poetry run pytest --cov
 
 ## Структура проекта
 
-├── Dockerfile
-├── compose.yaml
-├── pyproject.toml
-├── alembic.ini
-├── main.py
-├── core/            # конфиг, безопасность, исключения
-├── db/              # подключение к БД
-├── models/          # SQLAlchemy модели
-├── schemas/         # Pydantic схемы
-├── repositories/    # запросы к БД
-├── services/        # бизнес-логика
-├── api/             # роутеры и зависимости
-├── tests/           # тесты
-├── alembic/         # миграции
-├── .github/workflows/
+├── Dockerfile  
+├── compose.yaml  
+├── pyproject.toml  
+├── alembic.ini  
+├── main.py  
+├── core/            # конфиг, безопасность, исключения  
+├── db/              # подключение к БД  
+├── models/          # SQLAlchemy модели  
+├── schemas/         # Pydantic схемы  
+├── repositories/    # запросы к БД  
+├── services/        # бизнес-логика  
+├── api/             # роутеры и зависимости  
+├── tests/           # тесты  
+├── alembic/         # миграции  
+├── .github/workflows/  
 
 ## Запуск
 

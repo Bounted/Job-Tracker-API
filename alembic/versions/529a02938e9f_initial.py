@@ -1,8 +1,8 @@
-"""rename tasks to applications
+"""Initial
 
-Revision ID: 93bf99040b59
-Revises: 9f1cb0fad52a
-Create Date: 2026-05-26 21:01:24.570582
+Revision ID: 529a02938e9f
+Revises: 
+Create Date: 2026-06-27 19:35:11.787086
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '93bf99040b59'
-down_revision: Union[str, Sequence[str], None] = '9f1cb0fad52a'
+revision: str = '529a02938e9f'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

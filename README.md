@@ -36,10 +36,6 @@ docker compose exec web poetry run pytest --cov
 
 При каждом пуше GitHub Actions автоматически запускает тесты.
 
-## Деплой
-
-Проект развёрнут на Render: https://fastapi-task-api-kzur.onrender.com/docs
-
 ## Структура проекта
 
 Dockerfile  
@@ -47,7 +43,7 @@ compose.yaml
 pyproject.toml  
 alembic.ini  
 main.py  
-- core/            # конфиг, безопасность, исключения  
+core/            # конфиг, безопасность, исключения  
 db/              # подключение к БД  
 models/          # SQLAlchemy модели  
 schemas/         # Pydantic схемы  

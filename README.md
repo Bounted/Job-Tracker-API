@@ -63,10 +63,10 @@ alembic/         # миграции
 1. Клонировать репозиторий
 2. Скопировать в .env и указать свои значения:
 
-SECRET_KEY=любой_секретный_ключ
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
-DATABASE_URL=postgresql+asyncpg://postgres:пароль@db:5432/job_tracker
+- SECRET_KEY=любой_секретный_ключ
+- ALGORITHM=HS256
+- ACCESS_TOKEN_EXPIRE_MINUTES=60
+- DATABASE_URL=postgresql+asyncpg://postgres:пароль@db:5432/job_tracker
 
 3. docker compose up -d --build
 4. docker compose exec web poetry run alembic upgrade head

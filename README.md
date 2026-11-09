@@ -47,7 +47,7 @@ compose.yaml
 pyproject.toml  
 alembic.ini  
 main.py  
-core/            # конфиг, безопасность, исключения  
+- core/            # конфиг, безопасность, исключения  
 db/              # подключение к БД  
 models/          # SQLAlchemy модели  
 schemas/         # Pydantic схемы  
